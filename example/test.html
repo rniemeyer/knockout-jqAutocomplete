@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../bower_components/jqueryui/themes/ui-lightness/jquery-ui.css" />
+</head>
+<body>
+    <input data-bind="jqAuto: { source: objectChoices, value: objectValue, inputProp: 'name', valueProp: 'id', labelProp: 'myLabel'  }" />
+    <input data-bind="jqAuto: { source: stringChoices, value: stringValue }" />
+
+    <input data-bind="jqAuto: { source: objectChoices, value: templateValue, inputProp: 'name', template: 'itemTmpl'  }" />
+    <input data-bind="jqAuto: { source: remoteHandler, value: remoteValue, inputProp: 'test', labelProp: 'test', valueProp: 'val', options: { delay: 250 } }" />
+
+    <hr/>
+
+    <pre data-bind="text: ko.toJSON(objectValue)"></pre>
+    <pre data-bind="text: ko.toJSON(stringValue)"></pre>
+    <pre data-bind="text: ko.toJSON(templateValue)"></pre>
+    <pre data-bind="text: ko.toJSON(remoteValue)"></pre>
+
+    <script src="../bower_components/jquery/jquery.min.js"></script>
+    <script src="../bower_components/jqueryui/ui/jquery-ui.js"></script>
+    <script src="../bower_components/knockout.js/knockout.js"></script>
+    <script src="../build/knockout-jqAutocomplete.js"></script>
+
+    <script id="itemTmpl" type="text/html">
+        <a>
+            <strong data-bind="text: id"></strong>
+            <em data-bind="text: name"></em>
+        </a>
+    </script>
+
+    <script type="text/javascript">
+        var ViewModel = function() {
+            this.objectValue = ko.observable();
+            this.stringValue = ko.observable();
+            this.templateValue = ko.observable();
+            this.remoteValue = ko.observable();
+
+            this.objectChoices = [];
+            this.stringChoices = [];
+
+            for (var i = 0; i < 100; i++) {
+                this.objectChoices.push({ id: i, name: "item " + i, myLabel: "item label " + i });
+                this.stringChoices.push("item " + i);
+            }
+
+            this.remoteHandler = function(term, callback) {
+                setTimeout(function() {
+                    callback([
+                        { test: term + "-1", val: 1 },
+                        { test: term + "-2", val: 2 },
+                        { test: term + "-3", val: 3 },
+                        { test: term + "-4", val: 4 },
+                        { test: term + "-5", val: 5 }
+                    ]);
+                }, 500);
+            }
+        };
+
+        ko.applyBindings(new ViewModel());
+    </script>
+</body>
+</html>

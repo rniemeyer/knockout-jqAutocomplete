@@ -1,0 +1,19 @@
+{
+  "name": "knockout-jqAutocomplete",
+  "version": "0.1.0",
+  "main": "build/knockout-jqAutocomplete.min.js",
+  "ignore": [
+    "examples",
+    "ext",
+    "reports",
+    "spec",
+    "src",
+    "gruntfile.js",
+    "package.json",
+    ".gitignore"
+  ],
+  "devDependencies": {
+    "knockout.js": "~3.0.0",
+    "jqueryui": "~1.10.3"
+  }
+}
