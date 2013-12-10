@@ -26,6 +26,8 @@ knockout-jqAutocomplete
 
 **Basic Usage**
 
+Samples in jsFiddle: http://jsfiddle.net/rniemeyer/uGGb8/
+
 * with a local array of strings
 
 ```js
