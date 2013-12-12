@@ -80,7 +80,8 @@
                     results.push({
                         label: props.label ? item[props.label] : item.toString(),
                         value: props.input ? item[props.input] : item.toString(),
-                        actual: props.value ? item[props.value] : item
+                        actual: props.value ? item[props.value] : item,
+                        data: item
                     });
                 }
             }
@@ -92,7 +93,7 @@
         //if specified, use a template to render an item
         this.renderItem = function(templateName, context, ul, item) {
             var $li = $("<li></li>").appendTo(ul),
-                itemContext = context.createChildContext(item.actual);
+                itemContext = context.createChildContext(item.data);
 
             //apply the template binding
             ko.applyBindingsToNode($li[0], { template: templateName }, itemContext);

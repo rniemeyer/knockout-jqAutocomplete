@@ -201,9 +201,9 @@ describe("knockout-jqAutocomplete", function(){
             responseData = response.mostRecentCall.args[0];
 
             expect(responseData.length).toEqual(3);
-            expect(JSON.stringify(responseData[0])).toEqual('{"label":"one","value":"one","actual":"one"}');
-            expect(JSON.stringify(responseData[1])).toEqual('{"label":"two","value":"two","actual":"two"}');
-            expect(JSON.stringify(responseData[2])).toEqual('{"label":"three","value":"three","actual":"three"}');
+            expect(JSON.stringify(responseData[0])).toEqual('{"label":"one","value":"one","actual":"one","data":"one"}');
+            expect(JSON.stringify(responseData[1])).toEqual('{"label":"two","value":"two","actual":"two","data":"two"}');
+            expect(JSON.stringify(responseData[2])).toEqual('{"label":"three","value":"three","actual":"three","data":"three"}');
         });
 
         it("should apply the filter to the results", function() {
@@ -225,8 +225,8 @@ describe("knockout-jqAutocomplete", function(){
             responseData = response.mostRecentCall.args[0];
 
             expect(responseData.length).toEqual(2);
-            expect(JSON.stringify(responseData[0])).toEqual('{"label":"two","value":"two","actual":"two"}');
-            expect(JSON.stringify(responseData[1])).toEqual('{"label":"three","value":"three","actual":"three"}');
+            expect(JSON.stringify(responseData[0])).toEqual('{"label":"two","value":"two","actual":"two","data":"two"}');
+            expect(JSON.stringify(responseData[1])).toEqual('{"label":"three","value":"three","actual":"three","data":"three"}');
         });
 
         it("should not error when data is empty", function() {
@@ -280,16 +280,18 @@ describe("knockout-jqAutocomplete", function(){
             responseData = response.mostRecentCall.args[0];
 
             expect(responseData.length).toEqual(3);
-            expect(JSON.stringify(responseData[0])).toEqual('{"label":"1-two","value":"1-one","actual":"1-three"}');
-            expect(JSON.stringify(responseData[1])).toEqual('{"label":"2-two","value":"2-one","actual":"2-three"}');
-            expect(JSON.stringify(responseData[2])).toEqual('{"label":"3-two","value":"3-one","actual":"3-three"}');
+            expect(responseData[0].label).toEqual("1-two");
+            expect(responseData[0].value).toEqual("1-one");
+            expect(responseData[0].actual).toEqual("1-three");
+
+            expect(responseData[1].label).toEqual("2-two");
+            expect(responseData[1].value).toEqual("2-one");
+            expect(responseData[1].actual).toEqual("2-three");
+
+            expect(responseData[2].label).toEqual("3-two");
+            expect(responseData[2].value).toEqual("3-one");
+            expect(responseData[2].actual).toEqual("3-three");
         });
-
-        //label is correctly specified from label property
-
-        //value is correctly specified from input property
-
-        //actual is correctly specified from value property
     });
 
     describe("renderItem", function() {
@@ -321,7 +323,7 @@ describe("knockout-jqAutocomplete", function(){
             $ul = $("<ul />").appendTo($input);
 
             instance.renderItem("test", context, $ul, {
-                actual: {
+                data: {
                     id: 1
                 }
             });
@@ -341,7 +343,7 @@ describe("knockout-jqAutocomplete", function(){
             $ul = $("<ul />").appendTo($input);
 
             instance.renderItem("test", context, $ul, {
-                actual: {
+                data: {
                     id: 1
                 }
             });
@@ -368,7 +370,7 @@ describe("knockout-jqAutocomplete", function(){
             $ul = $("<ul />").appendTo($input);
 
             li = instance.renderItem("test", context, $ul, {
-                actual: {
+                data: {
                     id: 1
                 }
             });
@@ -546,6 +548,35 @@ describe("knockout-jqAutocomplete", function(){
                     value: value,
                     source: items,
                     template: "test"
+                }
+            });
+
+            $input.autocomplete("search", "t");
+
+            $listItems = $("ul.ui-autocomplete li");
+
+            expect($listItems.length).toEqual(2);
+            expect($listItems.first().text()).toEqual("!two!");
+            expect($listItems.last().text()).toEqual("!three!");
+        });
+
+        it("context bound to template should be data item", function() {
+            var $listItems,
+                items = [
+                    { name: "one" },
+                    { name: "two" },
+                    { name: "three" }
+                ],
+                value = ko.observable();
+
+            engine.addTemplate("test", "<a>!<span data-bind='text: name'></span>!</a>");
+
+            ko.applyBindingsToNode(input, {
+                jqAuto: {
+                    value: value,
+                    source: items,
+                    template: "test",
+                    valueProp: "name"
                 }
             });
 
