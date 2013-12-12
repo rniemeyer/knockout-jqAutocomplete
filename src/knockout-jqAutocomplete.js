@@ -62,6 +62,7 @@
 
         //if dealing with local data, the default filtering function
         this.defaultFilter = function(item, term) {
+            term = term && term.toLowerCase();
             return (item || item === 0) && ko.toJSON(item).toLowerCase().indexOf(term) > -1;
         };
 

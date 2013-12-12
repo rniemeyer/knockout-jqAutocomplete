@@ -229,6 +229,29 @@ describe("knockout-jqAutocomplete", function(){
             expect(JSON.stringify(responseData[1])).toEqual('{"label":"three","value":"three","actual":"three","data":"three"}');
         });
 
+        it("should apply the default filter in a case-insensitve manner to the results", function() {
+            var responseData,
+                response = jasmine.createSpy(),
+                valueAccessor = function() {
+                    return {};
+                },
+                data = [
+                    "one",
+                    "two",
+                    "three"
+                ],
+                request = { term: "T" };
+
+
+            instance.processOptions(valueAccessor, instance.defaultFilter, data, request, response);
+
+            responseData = response.mostRecentCall.args[0];
+
+            expect(responseData.length).toEqual(2);
+            expect(JSON.stringify(responseData[0])).toEqual('{"label":"two","value":"two","actual":"two","data":"two"}');
+            expect(JSON.stringify(responseData[1])).toEqual('{"label":"three","value":"three","actual":"three","data":"three"}');
+        });
+
         it("should not error when data is empty", function() {
             var responseData,
                 response = jasmine.createSpy(),

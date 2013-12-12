@@ -1,4 +1,4 @@
-// knockout-jqAutocomplete 0.1.0 | (c) 2013 Ryan Niemeyer |  http://www.opensource.org/licenses/mit-license
+// knockout-jqAutocomplete 0.1.1 | (c) 2013 Ryan Niemeyer |  http://www.opensource.org/licenses/mit-license
 ;(function(factory) {
     if (typeof define === "function" && define.amd) {
         // AMD anonymous module
@@ -63,6 +63,7 @@
 
         //if dealing with local data, the default filtering function
         this.defaultFilter = function(item, term) {
+            term = term && term.toLowerCase();
             return (item || item === 0) && ko.toJSON(item).toLowerCase().indexOf(term) > -1;
         };
 
@@ -81,7 +82,8 @@
                     results.push({
                         label: props.label ? item[props.label] : item.toString(),
                         value: props.input ? item[props.input] : item.toString(),
-                        actual: props.value ? item[props.value] : item
+                        actual: props.value ? item[props.value] : item,
+                        data: item
                     });
                 }
             }
@@ -93,7 +95,7 @@
         //if specified, use a template to render an item
         this.renderItem = function(templateName, context, ul, item) {
             var $li = $("<li></li>").appendTo(ul),
-                itemContext = context.createChildContext(item.actual);
+                itemContext = context.createChildContext(item.data);
 
             //apply the template binding
             ko.applyBindingsToNode($li[0], { template: templateName }, itemContext);
