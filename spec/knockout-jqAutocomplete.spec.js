@@ -503,6 +503,18 @@ describe("knockout-jqAutocomplete", function(){
         });
     });
 
+    describe("update function", function() {
+        it("should set the input's value", function() {
+            instance.update(input, function() {
+                return {
+                    value: ko.observable("test")
+                };
+            });
+
+            expect(input.value).toEqual("test");
+        });
+    });
+
     describe("using the binding", function() {
         it("should allow binding against strings", function() {
             var $listItems,
@@ -752,6 +764,38 @@ describe("knockout-jqAutocomplete", function(){
             $listItems.first("a").click();
 
             expect($input.text()).toEqual("one description");
+        });
+
+        it("should initially set the input's value", function() {
+            var items = [],
+                value = ko.observable("testing");
+
+            ko.applyBindingsToNode(input, {
+                jqAuto: {
+                    value: value,
+                    source: items
+                }
+            });
+
+            expect(input.value).toEqual("testing");
+        });
+
+        it("should update the input's value when the observable changes", function() {
+            var items = [],
+                value = ko.observable("testing");
+
+            ko.applyBindingsToNode(input, {
+                jqAuto: {
+                    value: value,
+                    source: items
+                }
+            });
+
+            expect(input.value).toEqual("testing");
+
+            value("updated");
+
+            expect(input.value).toEqual("updated");
         });
     });
 });

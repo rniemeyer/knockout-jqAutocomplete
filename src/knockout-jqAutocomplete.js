@@ -8,11 +8,12 @@
     }
 })(function(ko, $) {
     var JqAuto = function() {
-        var self = this;
+        var self = this,
+            unwrap = ko.utils.unwrapObservable; //support older KO versions that did not have ko.unwrap
 
         //binding's init function
         this.init = function(element, valueAccessor, allBindings, data, context) {
-            var options = ko.unwrap(valueAccessor()),
+            var options = unwrap(valueAccessor()),
                 config = {},
                 filter = typeof options.filter === "function" ? options.filter : self.defaultFilter;
 
@@ -60,6 +61,14 @@
             });
         };
 
+        //the binding's update function. keep value in sync with model
+        this.update = function(element, valueAccessor) {
+            var options = unwrap(valueAccessor()),
+                value = unwrap(options && options.value);
+
+            element.value = value;
+        };
+
         //if dealing with local data, the default filtering function
         this.defaultFilter = function(item, term) {
             term = term && term.toLowerCase();
@@ -69,7 +78,7 @@
         //filter/map options to be in a format that autocomplete requires
         this.processOptions = function(valueAccessor, filter, data, request, response) {
             var item, index, length,
-                items = ko.unwrap(data) || [],
+                items = unwrap(data) || [],
                 results = [],
                 props = this.getPropertyNames(valueAccessor);
 
