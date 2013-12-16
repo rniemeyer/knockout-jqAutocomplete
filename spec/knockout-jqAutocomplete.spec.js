@@ -696,6 +696,25 @@ describe("knockout-jqAutocomplete", function(){
             expect(value()).toEqual("two");
         });
 
+        it("should populate the value when not selecting from list", function() {
+            var $listItems,
+                items = ["one", "two", "three"],
+                value = ko.observable();
+
+            ko.applyBindingsToNode(input, {
+                jqAuto: {
+                    value: value,
+                    source: items
+                }
+            });
+
+
+            $input.val("test").blur();
+            $input.trigger("autocompletechange");
+
+            expect(value()).toEqual("test");
+        });
+
         it("should respect the valueProp option on selection", function() {
             var $listItems,
                 items = [

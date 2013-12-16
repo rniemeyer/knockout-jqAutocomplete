@@ -44,6 +44,13 @@
                 options.value(ui.item && ui.item.actual);
             };
 
+            //user made a change without selecting a value from the list
+            config.change = function(event, ui) {
+                if (!ui.item) {
+                    options.value(event.target && event.target.value);
+                }
+            };
+
             //initialize the widget
             var widget = $(element).autocomplete(config).data("ui-autocomplete");
 
