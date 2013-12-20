@@ -14,6 +14,8 @@ knockout-jqAutocomplete
 
 * **valueProp** - If specified, this is a property name to use to populate the value when a selection is made. If not specified, the actual item itself will be used as the value.
 
+* **dataValue** - If specified, this observable will be populated with the currently selected data item. This option will allow you to populate **value** with the **valueProp** and have access to the selected object at the same time through **dataValue**.
+
 * **template** - If specified, this is the name of a template to use when building each item in the menu choices. This allows full customization of the options shown to the user.
 
 * **options** - Anything passed in `options` will be included as options passed when initializing the `autocomplete` widget. See http://api.jqueryui.com/autocomplete/ for a list of the available options.

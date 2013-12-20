@@ -785,6 +785,44 @@ describe("knockout-jqAutocomplete", function(){
             expect($input.text()).toEqual("one description");
         });
 
+        it("should respect the dataValue option on selection", function() {
+            var $listItems,
+                items = [
+                    {
+                        name: "one",
+                        description: "one description"
+                    },
+                    {
+                        name: "two",
+                        description: "two description"
+                    },
+                    {
+                        name: "three",
+                        description: "three description"
+                    }
+                ],
+                value = ko.observable(),
+                dataValue = ko.observable();
+
+            ko.applyBindingsToNode(input, {
+                jqAuto: {
+                    value: value,
+                    dataValue: dataValue,
+                    source: items,
+                    valueProp: "name"
+                }
+            });
+
+            $input.autocomplete("search", "one");
+
+            $listItems = $("ul.ui-autocomplete li");
+
+            $listItems.first("a").click();
+
+            expect(value()).toEqual("one");
+            expect(dataValue()).toEqual(items[0]);
+        });
+
         it("should initially set the input's value", function() {
             var items = [],
                 value = ko.observable("testing");
