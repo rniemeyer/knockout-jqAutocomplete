@@ -697,8 +697,7 @@ describe("knockout-jqAutocomplete", function(){
         });
 
         it("should populate the value when not selecting from list", function() {
-            var $listItems,
-                items = ["one", "two", "three"],
+            var items = ["one", "two", "three"],
                 value = ko.observable();
 
             ko.applyBindingsToNode(input, {
@@ -708,11 +707,30 @@ describe("knockout-jqAutocomplete", function(){
                 }
             });
 
+            $input.val("test").blur();
+            $input.trigger("autocompletechange");
+
+            expect(value()).toEqual("test");
+        });
+
+        it("should clear the dataValue when not selecting from list", function() {
+            var items = ["one", "two", "three"],
+                value = ko.observable(),
+                dataValue = ko.observable("test");
+
+            ko.applyBindingsToNode(input, {
+                jqAuto: {
+                    value: value,
+                    dataValue: dataValue,
+                    source: items
+                }
+            });
 
             $input.val("test").blur();
             $input.trigger("autocompletechange");
 
             expect(value()).toEqual("test");
+            expect(dataValue()).toEqual(null);
         });
 
         it("should respect the valueProp option on selection", function() {

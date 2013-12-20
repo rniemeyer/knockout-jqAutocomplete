@@ -1,4 +1,4 @@
-// knockout-jqAutocomplete 0.2.0 | (c) 2013 Ryan Niemeyer |  http://www.opensource.org/licenses/mit-license
+// knockout-jqAutocomplete 0.2.1 | (c) 2013 Ryan Niemeyer |  http://www.opensource.org/licenses/mit-license
 ;(function(factory) {
     if (typeof define === "function" && define.amd) {
         // AMD anonymous module
@@ -42,17 +42,23 @@
 
             //handle updating the actual value
             config.select = function(event, ui) {
-                options.value(ui.item && ui.item.actual);
+                if (ui.item && ui.item.actual) {
+                    options.value(ui.item.actual);
 
-                if (ko.isWriteableObservable(options.dataValue)) {
-                    options.dataValue(ui.item.data);
+                    if (ko.isWriteableObservable(options.dataValue)) {
+                        options.dataValue(ui.item.data);
+                    }
                 }
             };
 
             //user made a change without selecting a value from the list
             config.change = function(event, ui) {
-                if (!ui.item) {
+                if (!ui.item || !ui.item.actual) {
                     options.value(event.target && event.target.value);
+
+                    if (ko.isWriteableObservable(options.dataValue)) {
+                        options.dataValue(null);
+                    }
                 }
             };
 

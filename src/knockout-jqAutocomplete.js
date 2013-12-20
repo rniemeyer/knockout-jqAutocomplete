@@ -41,17 +41,23 @@
 
             //handle updating the actual value
             config.select = function(event, ui) {
-                options.value(ui.item && ui.item.actual);
+                if (ui.item && ui.item.actual) {
+                    options.value(ui.item.actual);
 
-                if (ko.isWriteableObservable(options.dataValue)) {
-                    options.dataValue(ui.item.data);
+                    if (ko.isWriteableObservable(options.dataValue)) {
+                        options.dataValue(ui.item.data);
+                    }
                 }
             };
 
             //user made a change without selecting a value from the list
             config.change = function(event, ui) {
-                if (!ui.item) {
+                if (!ui.item || !ui.item.actual) {
                     options.value(event.target && event.target.value);
+
+                    if (ko.isWriteableObservable(options.dataValue)) {
+                        options.dataValue(null);
+                    }
                 }
             };
 
