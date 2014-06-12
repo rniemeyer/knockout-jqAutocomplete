@@ -123,7 +123,7 @@ var viewModel = {
 ```
 
 ```html
-<input data-bind="jqAuto: { value: myValue, source: getOptions" />
+<input data-bind="jqAuto: { value: myValue, source: getOptions }" />
 ```
 
 * with a remote array of objects
