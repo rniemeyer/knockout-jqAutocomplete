@@ -81,9 +81,10 @@
         //the binding's update function. keep value in sync with model
         this.update = function(element, valueAccessor) {
             var options = unwrap(valueAccessor()),
-                value = unwrap(options && options.value);
+                value = unwrap(options && options.value),
+                props = self.getPropertyNames(valueAccessor);
 
-            element.value = value;
+            element.value = value && props.input ? value[props.input] : value;
         };
 
         //if dealing with local data, the default filtering function
