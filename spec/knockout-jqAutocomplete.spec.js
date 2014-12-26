@@ -67,11 +67,13 @@ describe("knockout-jqAutocomplete", function(){
         it("should apply additional options passed in the binding", function() {
             instance.init(input, function() {
                 return {
-                    delay: 1000
+                    options: {
+                        delay: 1000
+                    }
                 };
             });
 
-            expect($input.autocomplete("option", "delay"), 1000);
+            expect($input.autocomplete("option", "delay")).toEqual(1000);
         });
 
         it("should apply global options", function() {
@@ -83,7 +85,7 @@ describe("knockout-jqAutocomplete", function(){
                 return {};
             });
 
-            expect($input.autocomplete("option", "delay"), 2000);
+            expect($input.autocomplete("option", "delay")).toEqual(2000);
         });
 
         it("should override global options with local options", function() {
@@ -97,7 +99,7 @@ describe("knockout-jqAutocomplete", function(){
                 };
             });
 
-            expect($input.autocomplete("option", "delay"), 2000);
+            expect($input.autocomplete("option", "delay")).toEqual(2000);
         });
 
         it("should destroy the widget when the node is removed by KO", function() {
@@ -198,7 +200,7 @@ describe("knockout-jqAutocomplete", function(){
 
             instance.processOptions(valueAccessor, null, data, request, response);
 
-            responseData = response.mostRecentCall.args[0];
+            responseData = response.calls.mostRecent().args[0];
 
             expect(responseData.length).toEqual(3);
             expect(JSON.stringify(responseData[0])).toEqual('{"label":"one","value":"one","actual":"one","data":"one"}');
@@ -222,7 +224,7 @@ describe("knockout-jqAutocomplete", function(){
 
             instance.processOptions(valueAccessor, instance.defaultFilter, data, request, response);
 
-            responseData = response.mostRecentCall.args[0];
+            responseData = response.calls.mostRecent().args[0];
 
             expect(responseData.length).toEqual(2);
             expect(JSON.stringify(responseData[0])).toEqual('{"label":"two","value":"two","actual":"two","data":"two"}');
@@ -245,7 +247,7 @@ describe("knockout-jqAutocomplete", function(){
 
             instance.processOptions(valueAccessor, instance.defaultFilter, data, request, response);
 
-            responseData = response.mostRecentCall.args[0];
+            responseData = response.calls.mostRecent().args[0];
 
             expect(responseData.length).toEqual(2);
             expect(JSON.stringify(responseData[0])).toEqual('{"label":"two","value":"two","actual":"two","data":"two"}');
@@ -264,7 +266,7 @@ describe("knockout-jqAutocomplete", function(){
 
             instance.processOptions(valueAccessor, instance.defaultFilter, data, request, response);
 
-            responseData = response.mostRecentCall.args[0];
+            responseData = response.calls.mostRecent().args[0];
 
             expect(responseData.length).toEqual(0);
         });
@@ -300,7 +302,7 @@ describe("knockout-jqAutocomplete", function(){
 
             instance.processOptions(valueAccessor, null, data, request, response);
 
-            responseData = response.mostRecentCall.args[0];
+            responseData = response.calls.mostRecent().args[0];
 
             expect(responseData.length).toEqual(3);
             expect(responseData[0].label).toEqual("1-two");
@@ -871,6 +873,55 @@ describe("knockout-jqAutocomplete", function(){
             value("updated");
 
             expect(input.value).toEqual("updated");
+        });
+
+        it("should call a passed in \"select\" function", function() {
+            var $listItems,
+                items = ["one", "two", "three"],
+                value = ko.observable(),
+                handler = jasmine.createSpy();
+
+            ko.applyBindingsToNode(input, {
+                jqAuto: {
+                    value: value,
+                    source: items,
+                    options: {
+                        select: handler
+                    }
+                }
+            });
+
+            $input.autocomplete("search", "t");
+
+            $listItems = $("ul.ui-autocomplete li");
+
+            $listItems.first("a").click();
+
+            expect(handler.calls.count()).toEqual(1);
+            expect(handler.calls.argsFor(0)[0].type).toEqual("autocompleteselect");
+            expect("item" in handler.calls.argsFor(0)[1]).toBeTruthy();
+        });
+
+        it("should call a passed in \"change\" function", function() {
+            var items = [],
+                value = ko.observable("testing"),
+                handler = jasmine.createSpy();
+
+            ko.applyBindingsToNode(input, {
+                jqAuto: {
+                    value: value,
+                    source: items,
+                    options: {
+                        change: handler
+                    }
+                }
+            });
+
+            $input.val("test").blur();
+
+            expect(handler.calls.count()).toEqual(1);
+            expect(handler.calls.argsFor(0)[0].type).toEqual("autocompletechange");
+            expect("item" in handler.calls.argsFor(0)[1]).toBeTruthy();
         });
     });
 });

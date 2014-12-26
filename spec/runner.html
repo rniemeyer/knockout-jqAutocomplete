@@ -7,9 +7,10 @@
     <link rel="stylesheet" type="text/css" href="lib/jasmine.css">
     <script type="text/javascript" src="lib/jasmine.js"></script>
     <script type="text/javascript" src="lib/jasmine-html.js"></script>
+    <script type="text/javascript" src="lib/boot.js"></script>
 
     <!-- dependencies -->
-    <script src="../bower_components/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="../bower_components/jquery/dist/jquery.js" type="text/javascript"></script>
     <script src="../bower_components/jqueryui/ui/minified/jquery-ui.min.js" type="text/javascript"></script>
     <script src="../bower_components/knockout.js/knockout.debug.js" type="text/javascript"></script>
 
@@ -18,35 +19,6 @@
 
     <!-- spec files  -->
     <script type="text/javascript" src="knockout-jqAutocomplete.spec.js"></script>
-
-    <script type="text/javascript">
-    (function() {
-      var jasmineEnv = jasmine.getEnv();
-      jasmineEnv.updateInterval = 1000;
-
-      var htmlReporter = new jasmine.HtmlReporter();
-
-      jasmineEnv.addReporter(htmlReporter);
-
-      jasmineEnv.specFilter = function(spec) {
-        return htmlReporter.specFilter(spec);
-      };
-
-      var currentWindowOnload = window.onload;
-
-      window.onload = function() {
-        if (currentWindowOnload) {
-          currentWindowOnload();
-        }
-        execJasmine();
-      };
-
-      function execJasmine() {
-        jasmineEnv.execute();
-      }
-
-    })();
-    </script>
 
 </head>
 

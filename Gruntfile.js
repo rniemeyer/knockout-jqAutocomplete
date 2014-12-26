@@ -35,7 +35,7 @@ module.exports = function(grunt) {
             options : {
                 specs : "spec/*.js",
                 vendor: [
-                    "bower_components/jquery/jquery.min.js",
+                    "bower_components/jquery/dist/jquery.min.js",
                     "bower_components/jqueryui/ui/jquery-ui.js",
                     "bower_components/knockout.js/knockout.js"
                 ],

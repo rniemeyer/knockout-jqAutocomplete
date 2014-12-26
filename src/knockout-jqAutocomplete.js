@@ -13,7 +13,8 @@
 
         //binding's init function
         this.init = function(element, valueAccessor, allBindings, data, context) {
-            var options = unwrap(valueAccessor()),
+            var existingSelect, existingChange,
+                options = unwrap(valueAccessor()),
                 config = {},
                 filter = typeof options.filter === "function" ? options.filter : self.defaultFilter;
 
@@ -39,6 +40,10 @@
                 config.source = self.processOptions.bind(self, valueAccessor, filter, options.source);
             }
 
+            //save any passed in select/change calls
+            existingSelect = typeof config.select === "function" && config.select;
+            existingChange = typeof config.change === "function" && config.change;
+
             //handle updating the actual value
             config.select = function(event, ui) {
                 if (ui.item && ui.item.actual) {
@@ -47,6 +52,10 @@
                     if (ko.isWriteableObservable(options.dataValue)) {
                         options.dataValue(ui.item.data);
                     }
+                }
+
+                if (existingSelect) {
+                    existingSelect.apply(this, arguments);
                 }
             };
 
@@ -58,6 +67,10 @@
                     if (ko.isWriteableObservable(options.dataValue)) {
                         options.dataValue(null);
                     }
+                }
+
+                if (existingChange) {
+                    existingChange.apply(this, arguments);
                 }
             };
 
