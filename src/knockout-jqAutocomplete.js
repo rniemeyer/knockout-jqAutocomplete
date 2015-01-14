@@ -94,9 +94,16 @@
         //the binding's update function. keep value in sync with model
         this.update = function(element, valueAccessor) {
             var options = unwrap(valueAccessor()),
-                value = unwrap(options && options.value);
+                value = unwrap(options && options.value),
+                inputProp = options.inputProp || options.labelProp || options.valueProp,
+                valueProp = options.valueProp,
+                sources = ko.unwrap(options.source);
 
-            element.value = value;
+            if (sources.constructor === Array) {
+                value = ko.utils.arrayFirst(options.source, function (opt) { return opt[valueProp] == value; });
+            }
+
+            element.value = value[inputProp] || value;
         };
 
         //if dealing with local data, the default filtering function
