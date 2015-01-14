@@ -95,15 +95,14 @@
         this.update = function(element, valueAccessor) {
             var options = unwrap(valueAccessor()),
                 value = unwrap(options && options.value),
-                inputProp = options.inputProp || options.labelProp || options.valueProp,
-                valueProp = options.valueProp,
-                sources = ko.unwrap(options.source);
+                propNames = self.getPropertyNames(valueAccessor),
+                sources = unwrap(options.source);
 
-            if (sources.constructor === Array) {
-                value = ko.utils.arrayFirst(options.source, function (opt) { return opt[valueProp] == value; });
+            if ($.isArray(sources)) {
+                value = ko.utils.arrayFirst(sources, function (opt) { return opt[propNames.value] == value; });
             }
 
-            element.value = value[inputProp] || value;
+            element.value = value[propNames.input] || value;
         };
 
         //if dealing with local data, the default filtering function
