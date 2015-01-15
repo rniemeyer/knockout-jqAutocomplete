@@ -515,6 +515,50 @@ describe("knockout-jqAutocomplete", function(){
 
             expect(input.value).toEqual("test");
         });
+        it("should set the input's value to labelProp based on valueProp", function () {
+            var items = [{ id: "1", name: "One" }],
+                value = ko.observable("1");
+
+            instance.update(input, function() {
+                return {
+                    value: value,
+                    source: items,
+                    labelProp: "name",
+                    valueProp: "id"
+                };
+            });
+
+            expect(input.value).toEqual("One");
+        });
+        it("should set the input's value to inputProp based on valueProp", function () {
+            var items = [{ id: "1", name: "One" }],
+                value = ko.observable("1");
+
+            instance.update(input, function () {
+                return {
+                    value: value,
+                    source: items,
+                    inputProp: "name",
+                    valueProp: "id"
+                };
+            });
+
+            expect(input.value).toEqual("One");
+        });
+        it("should set the input's value to valueProp based on valueProp", function () {
+            var items = [{ id: "1", name: "One" }],
+                value = ko.observable("1");
+
+            instance.update(input, function () {
+                return {
+                    value: value,
+                    source: items,
+                    valueProp: "id"
+                };
+            });
+
+            expect(input.value).toEqual("1");
+        });
     });
 
     describe("using the binding", function() {
@@ -855,6 +899,53 @@ describe("knockout-jqAutocomplete", function(){
             });
 
             expect(input.value).toEqual("testing");
+        });
+
+        it("should initially set the input's value to inputProp based on valueProp", function () {
+            var items = [{id:"1", name: "One"}],
+                value = ko.observable("1");
+
+            ko.applyBindingsToNode(input, {
+                jqAuto: {
+                    value: value,
+                    source: items,
+                    inputProp: "name",
+                    valueProp: "id"
+                }
+            });
+
+            expect(input.value).toEqual("One");
+        });
+
+        it("should initially set the input's value to labelProp based on valueProp", function () {
+            var items = [{ id: "1", name: "One" }],
+                value = ko.observable("1");
+
+            ko.applyBindingsToNode(input, {
+                jqAuto: {
+                    value: value,
+                    source: items,
+                    labelProp: "name",
+                    valueProp: "id"
+                }
+            });
+
+            expect(input.value).toEqual("One");
+        });
+
+        it("should initially set the input's value to valueProp based on valueProp", function () {
+            var items = [{ id: "1", name: "One" }],
+                value = ko.observable("1");
+
+            ko.applyBindingsToNode(input, {
+                jqAuto: {
+                    value: value,
+                    source: items,
+                    valueProp: "id"
+                }
+            });
+
+            expect(input.value).toEqual("1");
         });
 
         it("should update the input's value when the observable changes", function() {

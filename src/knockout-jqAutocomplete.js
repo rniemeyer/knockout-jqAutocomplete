@@ -98,11 +98,15 @@
                 propNames = self.getPropertyNames(valueAccessor),
                 sources = unwrap(options.source);
 
-            if ($.isArray(sources)) {
-                value = ko.utils.arrayFirst(sources, function (opt) { return opt[propNames.value] == value; });
+            if (value && $.isArray(sources) && propNames && propNames.value) {
+                value = ko.utils.arrayFirst(sources, function (opt) { return opt[propNames.value] == value; }) || value;
             }
-
-            element.value = value[propNames.input] || value;
+            if (value && propNames && propNames.input) {
+                element.value = value[propNames.input];
+            }
+            else {
+                element.value = value;
+            }
         };
 
         //if dealing with local data, the default filtering function
