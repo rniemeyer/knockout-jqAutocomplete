@@ -515,6 +515,7 @@ describe("knockout-jqAutocomplete", function(){
 
             expect(input.value).toEqual("test");
         });
+
         it("should set the input's value to labelProp based on valueProp", function () {
             var items = [{ id: "1", name: "One" }],
                 value = ko.observable("1");
@@ -530,6 +531,7 @@ describe("knockout-jqAutocomplete", function(){
 
             expect(input.value).toEqual("One");
         });
+
         it("should set the input's value to inputProp based on valueProp", function () {
             var items = [{ id: "1", name: "One" }],
                 value = ko.observable("1");
@@ -545,6 +547,7 @@ describe("knockout-jqAutocomplete", function(){
 
             expect(input.value).toEqual("One");
         });
+
         it("should set the input's value to valueProp based on valueProp", function () {
             var items = [{ id: "1", name: "One" }],
                 value = ko.observable("1");

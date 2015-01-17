@@ -18,9 +18,9 @@ knockout-jqAutocomplete
 
 * **template** - If specified, this is the name of a template to use when building each item in the menu choices. This allows full customization of the options shown to the user.
 
-* **options** - Anything passed in `options` will be included as options passed when initializing the `autocomplete` widget. See http://api.jqueryui.com/autocomplete/ for a list of the available options.
+* **options** - Anything passed in `options` will be included as options passed to the `autocomplete` widget. See http://api.jqueryui.com/autocomplete/ for a list of the available options.
 
-* **filter** - If specified, this function is used to search local data. The function takes in an item and the search term as arguments and should return a whether the item matches. The default filter will call `ko.toJSON` on each item and determine if the search term is contained anywhere in the JSON string. When a function is used for the `source` (remote data), then the data is not filtered, as the response should already be appropriately filtered.
+* **filter** - If specified, this function is used to search local data. The function takes in an item and the search term as arguments and should return whether the item matches. The default filter will call `ko.toJSON` on each item and determine if the search term is contained anywhere in the JSON string. When a function is used for the `source` (remote data), then the data is not filtered, as the response should already be appropriately filtered.
 
 **Global options**
 

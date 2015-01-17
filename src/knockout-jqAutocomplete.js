@@ -93,19 +93,28 @@
 
         //the binding's update function. keep value in sync with model
         this.update = function(element, valueAccessor) {
-            var options = unwrap(valueAccessor()),
-                value = unwrap(options && options.value),
-                propNames = self.getPropertyNames(valueAccessor),
-                sources = unwrap(options.source);
+            var propNames, sources,
+                options = unwrap(valueAccessor()),
+                value = unwrap(options && options.value);
 
-            if (value && $.isArray(sources) && propNames && propNames.value) {
-                value = ko.utils.arrayFirst(sources, function (opt) { return opt[propNames.value] == value; }) || value;
-            }
-            if (value && propNames && propNames.input) {
-                element.value = value[propNames.input];
-            }
-            else {
-                element.value = value;
+            // find the appropriate value for the input
+            if (value || value === 0) {
+                sources = unwrap(options.source);
+                propNames = self.getPropertyNames(valueAccessor);
+
+                // if there is local data, then try to determine the appropriate value for the input
+                if ($.isArray(sources) && propNames.value) {
+                    value = ko.utils.arrayFirst(sources, function (opt) {
+                            return opt[propNames.value] == value; }
+                    ) || value;
+                }
+
+                if (propNames.input) {
+                    element.value = value[propNames.input];
+                }
+                else {
+                    element.value = value;
+                }
             }
         };
 
