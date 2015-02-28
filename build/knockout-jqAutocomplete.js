@@ -1,4 +1,4 @@
-// knockout-jqAutocomplete 0.4.0 | (c) 2015 Ryan Niemeyer |  http://www.opensource.org/licenses/mit-license
+// knockout-jqAutocomplete 0.4.1 | (c) 2015 Ryan Niemeyer |  http://www.opensource.org/licenses/mit-license
 ;(function(factory) {
     if (typeof define === "function" && define.amd) {
         // AMD anonymous module
@@ -110,7 +110,7 @@
                     ) || value;
                 }
 
-                if (propNames.input) {
+                if (propNames.input && value && typeof value === "object") {
                     element.value = value[propNames.input];
                 }
                 else {

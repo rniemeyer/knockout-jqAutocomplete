@@ -109,7 +109,7 @@
                     ) || value;
                 }
 
-                if (propNames.input) {
+                if (propNames.input && value && typeof value === "object") {
                     element.value = value[propNames.input];
                 }
                 else {
