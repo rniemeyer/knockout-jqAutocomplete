@@ -1,4 +1,4 @@
-// knockout-jqAutocomplete 0.4.1 | (c) 2015 Ryan Niemeyer |  http://www.opensource.org/licenses/mit-license
+// knockout-jqAutocomplete 0.4.2 | (c) 2015 Ryan Niemeyer |  http://www.opensource.org/licenses/mit-license
 ;(function(factory) {
     if (typeof define === "function" && define.amd) {
         // AMD anonymous module
@@ -98,24 +98,27 @@
                 options = unwrap(valueAccessor()),
                 value = unwrap(options && options.value);
 
+            if (!value && value !== 0) {
+                value = "";
+            }
+
             // find the appropriate value for the input
-            if (value || value === 0) {
-                sources = unwrap(options.source);
-                propNames = self.getPropertyNames(valueAccessor);
+            sources = unwrap(options.source);
+            propNames = self.getPropertyNames(valueAccessor);
 
-                // if there is local data, then try to determine the appropriate value for the input
-                if ($.isArray(sources) && propNames.value) {
-                    value = ko.utils.arrayFirst(sources, function (opt) {
-                            return opt[propNames.value] == value; }
-                    ) || value;
-                }
+            // if there is local data, then try to determine the appropriate value for the input
+            if ($.isArray(sources) && propNames.value) {
+                value = ko.utils.arrayFirst(sources, function (opt) {
+                        return opt[propNames.value] == value;
+                    }
+                ) || value;
+            }
 
-                if (propNames.input && value && typeof value === "object") {
-                    element.value = value[propNames.input];
-                }
-                else {
-                    element.value = value;
-                }
+            if (propNames.input && value && typeof value === "object") {
+                element.value = value[propNames.input];
+            }
+            else {
+                element.value = value;
             }
         };
 

@@ -516,6 +516,36 @@ describe("knockout-jqAutocomplete", function(){
             expect(input.value).toEqual("test");
         });
 
+        it("should clear the input's value, when value is null", function() {
+            instance.update(input, function() {
+                return {
+                    value: ko.observable(null)
+                };
+            });
+
+            expect(input.value).toEqual("");
+        });
+
+        it("should clear the input's value, when value is undefined", function() {
+            instance.update(input, function() {
+                return {
+                    value: ko.observable()
+                };
+            });
+
+            expect(input.value).toEqual("");
+        });
+
+        it("should clear the input's value, when value is an empty string", function() {
+            instance.update(input, function() {
+                return {
+                    value: ko.observable()
+                };
+            });
+
+            expect(input.value).toEqual("");
+        });
+
         it("should set the input's value to labelProp based on valueProp", function () {
             var items = [{ id: "1", name: "One" }],
                 value = ko.observable("1");
