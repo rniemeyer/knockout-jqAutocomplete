@@ -1,8 +1,8 @@
-// knockout-jqAutocomplete 0.4.2 | (c) 2015 Ryan Niemeyer |  http://www.opensource.org/licenses/mit-license
+// knockout-jqAutocomplete 0.4.3 | (c) 2015 Ryan Niemeyer |  http://www.opensource.org/licenses/mit-license
 ;(function(factory) {
     if (typeof define === "function" && define.amd) {
         // AMD anonymous module
-        define(["knockout", "jquery", "jquery.ui"], factory);
+        define(["knockout", "jquery", "jquery-ui/autocomplete"], factory);
     } else {
         // No module loader - put directly in global namespace
         factory(window.ko, jQuery);
