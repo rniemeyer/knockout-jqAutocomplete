@@ -52,6 +52,9 @@
                     if (ko.isWriteableObservable(options.dataValue)) {
                         options.dataValue(ui.item.data);
                     }
+                    if (ko.isWriteableObservable(options.label)) {
+                        options.label(ui.item.label); 
+                    }
                 }
 
                 if (existingSelect) {
@@ -95,7 +98,8 @@
         this.update = function(element, valueAccessor) {
             var propNames, sources,
                 options = unwrap(valueAccessor()),
-                value = unwrap(options && options.value);
+                value = unwrap(options && options.value),
+                label = unwrap(options && options.label);
 
             if (!value && value !== 0) {
                 value = "";
@@ -113,7 +117,13 @@
                 ) || value;
             }
 
-            if (propNames.input && value && typeof value === "object") {
+            if (label){
+                if(typeof label === "object" && propNames.input){
+                    element.value = label[propNames.input];
+                }else{
+                    element.value = label;
+                }
+            }else if (value && typeof value === "object") {
                 element.value = value[propNames.input];
             }
             else {
