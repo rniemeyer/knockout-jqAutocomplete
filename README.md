@@ -40,7 +40,7 @@ var viewModel = {
 ```
 
 ```html
-<input data-bind="jqAuto: { value: myValue, source: myOptions" />
+<input data-bind="jqAuto: { value: myValue, source: myOptions }" />
 ```
 
 * with a local array of objects
