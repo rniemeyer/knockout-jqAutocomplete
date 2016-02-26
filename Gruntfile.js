@@ -37,7 +37,7 @@ module.exports = function(grunt) {
                 vendor: [
                     "bower_components/jquery/dist/jquery.min.js",
                     "bower_components/jqueryui/ui/jquery-ui.js",
-                    "bower_components/knockout.js/knockout.js"
+                    "bower_components/knockout/dist/knockout.js"
                 ],
                 template : require("grunt-template-jasmine-istanbul"),
                 templateOptions: {
