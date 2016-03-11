@@ -141,7 +141,9 @@
 
                 if (!filter || filter(item, request.term)) {
                     results.push({
-                        label: props.label ? item[props.label] : item.toString(),
+                        label: props.label ? 
+								(typeof item[props.label] === "function" ? item[props.label]() : item[props.label]) : 
+								item.toString(),
                         value: props.input ? item[props.input] : item.toString(),
                         actual: props.value ? item[props.value] : item,
                         data: item
