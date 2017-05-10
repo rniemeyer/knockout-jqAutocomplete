@@ -181,7 +181,7 @@ var viewModel = {
         <span data-bind="text: name"></span>
         ( <span data-bind="text: description"></span> )
     </a>
-<script>
+</script>
 ```
 
 **Future Plans**
