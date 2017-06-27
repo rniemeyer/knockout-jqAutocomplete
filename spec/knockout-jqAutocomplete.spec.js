@@ -95,11 +95,13 @@ describe("knockout-jqAutocomplete", function(){
 
             instance.init(input, function() {
                 return {
-                    delay: 1000
+                    options: {
+                        delay: 1000
+                    }
                 };
             });
 
-            expect($input.autocomplete("option", "delay")).toEqual(2000);
+            expect($input.autocomplete("option", "delay")).toEqual(1000);
         });
 
         it("should destroy the widget when the node is removed by KO", function() {
