@@ -88,7 +88,7 @@ describe("knockout-jqAutocomplete", function(){
             expect($input.autocomplete("option", "delay")).toEqual(2000);
         });
 
-        it("should override global options with local options", function() {
+        it("should override local options with global options", function() {
             instance.options = {
                 delay: 2000
             };
