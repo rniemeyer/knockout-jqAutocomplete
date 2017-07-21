@@ -110,7 +110,7 @@
                 value = ko.utils.arrayFirst(sources, function (opt) {
                         return opt[propNames.value] == value;
                     }
-                ) || value;
+                );
             }
 
             if (propNames.input && value && typeof value === "object") {
