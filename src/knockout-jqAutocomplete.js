@@ -77,9 +77,19 @@
             //initialize the widget
             var widget = $(element).autocomplete(config).data("ui-autocomplete");
 
-            //render a template for the items
-            if (options.template) {
+            if (extensions._renderItem) {
+                widget._renderItem = extensions._renderItem;
+	        } else if (options.template) {
+                //render a template for the items
                 widget._renderItem = self.renderItem.bind(self, options.template, context);
+            } 
+
+            if (extensions._renderMenu) {
+                widget._renderMenu = extensions._renderMenu;
+            }
+
+            if (extensions._resizeMenu) {
+                widget._resizeMenu = extensions._resizeMenu;
             }
 
             //destroy the widget if KO removes the element
