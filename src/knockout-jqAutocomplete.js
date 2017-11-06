@@ -166,18 +166,16 @@
             propNames = self.getPropertyNames(valueAccessor);
 
             // if there is local data, then try to determine the appropriate value for the input
-            if ($.isArray(sources) && propNames.value) {
+            if ($.isArray(sources)) {
                 value = ko.utils.arrayFirst(sources, function (opt) {
-                        return opt[propNames.value] == value;
+                        return (propNames.value ? opt[propNames.value] : opt) == value;
                     }
                 ) || value;
             }
 
-            if (propNames.input && value && typeof value === "object") {
-                element.value = value[propNames.input];
-            }
-            else {
-                element.value = value;
+            if (value)
+            {
+                element.value = (propNames.input && typeof value === "object") ? value[propNames.input] : value;
             }
         };
 
