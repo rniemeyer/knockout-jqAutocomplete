@@ -168,7 +168,7 @@
 
         //retrieve the property names to use for the label, input, and value
         this.getPropertyNames = function(valueAccessor) {
-            var options = ko.toJS(valueAccessor());
+            var options = unwrap(valueAccessor());
 
             return {
                 label: options.labelProp || options.valueProp,
