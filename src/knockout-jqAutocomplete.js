@@ -18,6 +18,10 @@
                 config = {},
                 filter = typeof options.filter === "function" ? options.filter : self.defaultFilter;
 
+            var recentlySelectedFlag = false;
+            var propNames = self.getPropertyNames(valueAccessor);
+            var sources = unwrap(options.source);
+
             //extend with global options
             ko.utils.extend(config, self.options);
             //override with options passed in binding
@@ -40,39 +44,95 @@
                 config.source = self.processOptions.bind(self, valueAccessor, filter, options.source);
             }
 
+            function writeValueToModel(valueToWrite) {
+                if (ko.isWriteableObservable(options.dataValue)) {
+                    options.dataValue(valueToWrite);
+                } else {  //write to non-observable
+                    //I'm not sure if this is still valid, but it will only happen if the user isn't using the plugin correctly anyway
+                    if (allBindings['_ko_property_writers'] && allBindings['_ko_property_writers']['jqAutoValue'])
+                        allBindings['_ko_property_writers']['jqAutoValue'](valueToWrite);
+                }
+            }
+
+            //if the user simply tabs out,  or blurs the input in some way
+            //we should see if they had typed in something valid, but didn't bother to actually
+            //click the item in the dropdown, thus failing to trigger the 'select' event
+            $(element).bind("blur", function (event) {
+                var currentValue = $(element).val();
+
+                var matchingItem = ko.utils.arrayFirst(sources, function (opt) {
+                    //guard against the invocation not specifying a propName for the value (as is the case with simple lists)
+                    var val = propNames.input ? opt[propNames.input] : opt;
+                    return unwrap(val) === currentValue;
+                });
+
+                var val = propNames.value ? (matchingItem ? matchingItem[propNames.value] : null) : matchingItem;
+                if (!matchingItem) {
+                    writeValueToModel(null);
+
+                }
+                    //it turns out that blur gets called after a select as well - if the user actually selected
+                    //something, rather than just typing and then tabbing out, then we don't want to automatically
+                    //select the first matching item in the list - multiple items may match with the same values!
+                    //So, since select is stronger than blurring, if someone has recently selected then let's not mess
+                    //with the value as long as it matches *something*
+                else if (!recentlySelectedFlag) {
+                    writeValueToModel(val);
+                }
+                recentlySelectedFlag = false;
+            });
+
             //save any passed in select/change calls
             existingSelect = typeof config.select === "function" && config.select;
             existingChange = typeof config.change === "function" && config.change;
 
             //handle updating the actual value
-            config.select = function(event, ui) {
-                if (ui.item && ui.item.actual) {
-                    options.value(ui.item.actual);
-
-                    if (ko.isWriteableObservable(options.dataValue)) {
-                        options.dataValue(ui.item.data);
-                    }
-                }
+            config.select = function (event, ui) {
+                //if a selection happened and the ui item is null, we should probably null out the value
+                options.value(ui.item ? ui.item.actual : null);
+                writeValueToModel(ui.item ? ui.item.data : null);
+                recentlySelectedFlag = true;
 
                 if (existingSelect) {
                     existingSelect.apply(this, arguments);
                 }
+
             };
 
             //user made a change without selecting a value from the list
-            config.change = function(event, ui) {
-                if (!ui.item || !ui.item.actual) {
-                    options.value(event.target && event.target.value);
+            config.change = function (event, ui) {
 
-                    if (ko.isWriteableObservable(options.dataValue)) {
-                        options.dataValue(null);
-                    }
+                var currentValue = ui && ui.item && ui.item.actual;
+
+                if (!currentValue) {
+                    options.value(event.target && event.target.value);
+                    writeValueToModel(null);
                 }
 
                 if (existingChange) {
                     existingChange.apply(this, arguments);
                 }
             };
+
+            // if the user changes the filter selections (or the source list in any way),
+            //   clear out the value of the model if the previous selection is now invalid
+            function clearAfterFilter() {
+                var currentValue = $(element).val();
+                var matchingItem = ko.utils.arrayFirst(unwrap(source), function (item) {
+                    var val = inputValueProp ? item[inputValueProp] : item;
+                    return unwrap(val) === currentValue;
+                });
+
+                if (!matchingItem) {
+                    writeValueToModel(null);
+                }
+            }
+
+            //whenever the items that make up the source are updated, make sure that autocomplete knows it
+            if (typeof options.source === "function") options.source.subscribe(function (newValue) {
+                clearAfterFilter();
+                $(element).autocomplete("option", "source", newValue);
+            });
 
             //initialize the widget
             var widget = $(element).autocomplete(config).data("ui-autocomplete");
@@ -106,18 +166,16 @@
             propNames = self.getPropertyNames(valueAccessor);
 
             // if there is local data, then try to determine the appropriate value for the input
-            if ($.isArray(sources) && propNames.value) {
+            if ($.isArray(sources)) {
                 value = ko.utils.arrayFirst(sources, function (opt) {
-                        return opt[propNames.value] == value;
+                        return (propNames.value ? opt[propNames.value] : opt) == value;
                     }
                 ) || value;
             }
 
-            if (propNames.input && value && typeof value === "object") {
-                element.value = value[propNames.input];
-            }
-            else {
-                element.value = value;
+            if (value)
+            {
+                element.value = (propNames.input && typeof value === "object") ? value[propNames.input] : value;
             }
         };
 
